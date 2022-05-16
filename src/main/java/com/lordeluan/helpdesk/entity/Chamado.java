@@ -40,6 +40,10 @@ public class Chamado {
 	@JoinColumn(name = "cliente_id")
 	private Cliente cliente;
 	
+	public Chamado() {
+		super();
+	}
+	
 	public Chamado(Integer id, Prioridade prioridade, Status status, String titulo, String observacoes, Tecnico tecnico,
 			Cliente cliente) {
 		super();
