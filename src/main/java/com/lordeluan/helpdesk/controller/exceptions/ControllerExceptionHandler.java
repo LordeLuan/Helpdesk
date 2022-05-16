@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import com.lordeluan.helpdesk.service.exceptions.DataIntegrityViolationException;
 import com.lordeluan.helpdesk.service.exceptions.ObjectnotFoundException;
 
 @ControllerAdvice
@@ -24,4 +25,15 @@ public class ControllerExceptionHandler {
 
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
 	}
+	
+	@ExceptionHandler(DataIntegrityViolationException.class)
+	public ResponseEntity<StandardError> dataIntegrityViolationException(DataIntegrityViolationException ex,
+			HttpServletRequest request) {
+
+		StandardError error = new StandardError(Instant.now(), HttpStatus.BAD_REQUEST.value(),
+				"Data violation", ex.getMessage(), request.getRequestURI());
+
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+	}
+	
 }
