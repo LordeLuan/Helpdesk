@@ -1,5 +1,6 @@
 package com.lordeluan.helpdesk.service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -45,7 +46,19 @@ public class ChamadoService {
 		return repository.save(newChamado(chamadoDTO));
 	}
 	
+
+	public Chamado update(Integer id, @Valid ChamadoDTO chamadoDTO) {
+		chamadoDTO.setId(id);
+//		informações que vem do banco desatualizadas
+		Chamado oldObj = findById(id);
+//		Pega as novas informações passadas
+		oldObj = newChamado(chamadoDTO);
+		
+		return repository.save(oldObj);
+	}
+	
 	private Chamado newChamado(ChamadoDTO obj) {
+//		Recebe os tecnicos passado no chamado
 		Tecnico tecnico = tecnicoService.findById(obj.getTecnico());
 		Cliente cliente = clienteService.findById(obj.getCliente());
 		
@@ -53,6 +66,10 @@ public class ChamadoService {
 		Chamado chamado = new Chamado();
 		if(obj.getId() != null) {
 			chamado.setId(obj.getId());
+		}
+		
+		if(obj.getStatus().equals(2)) {
+			chamado.setDataFechamento(LocalDate.now());
 		}
 		
 //		Seta as informações para o novo chamado entidade ser inserido no banco
@@ -65,5 +82,6 @@ public class ChamadoService {
 		
 		return chamado;
 	}
+
 	
 }
