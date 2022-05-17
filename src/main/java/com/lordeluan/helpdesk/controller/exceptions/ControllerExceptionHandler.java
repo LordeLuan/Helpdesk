@@ -35,7 +35,7 @@ public class ControllerExceptionHandler {
 		StandardError error = new StandardError(Instant.now(), HttpStatus.BAD_REQUEST.value(),
 				"Data violation", ex.getMessage(), request.getRequestURI());
 
-		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
 	}
 	
 	@ExceptionHandler(MethodArgumentNotValidException.class)
@@ -50,6 +50,7 @@ public class ControllerExceptionHandler {
 		for (FieldError x : ex.getBindingResult().getFieldErrors()) {
 //			chama o metodo criado e passa o nome do campo e a mensagem padrão da exceção
 			errors.addError(x.getField(), x.getDefaultMessage());
+			
 		}
 
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);

@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -40,6 +42,14 @@ public class TecnicoService {
 		return new TecnicoDTO(repository.save(new Tecnico(tecDTO)));
 	}
 
+	public Tecnico update(Integer id, @Valid TecnicoDTO tecDTO) {
+		tecDTO.setId(id);
+		Tecnico oldTecDto = findById(id);
+		validaPorCpfEEmail(tecDTO);
+		oldTecDto = new Tecnico(tecDTO);
+		return repository.save(oldTecDto);
+	}
+	
 	private void validaPorCpfEEmail(TecnicoDTO tecDTO) {
 		Optional<Pessoa> obj = pessoaRepository.findByCpf(tecDTO.getCpf());
 		if(obj.isPresent() && obj.get().getId() != tecDTO.getId()) {
@@ -51,4 +61,15 @@ public class TecnicoService {
 			throw new DataIntegrityViolationException("E-mail já cadastrado no sistema");
 		}
 	}
+
+	public void delete(Integer id) {
+		Tecnico obj = findById(id);
+//		Se o ténico tiver pelo menos 1 chamado não poderá ser deletado e será lançada uma exceção
+		if(obj.getChamados().size() > 0) {
+			throw new DataIntegrityViolationException("Técnico possui ordens de serviço e não pode ser deletado!");
+		}
+		repository.delete(obj);
+	}
+
+
 }
