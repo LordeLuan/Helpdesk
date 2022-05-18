@@ -64,7 +64,7 @@ public class SecurityConfig  extends WebSecurityConfigurerAdapter {
 	}
 	
 	
-//	Liberar acesso as metodos da lista para todos os usuario
+//	Liberar acesso aos metodos da lista para todos os usuario
 	@Bean
 	CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration configuration = new CorsConfiguration().applyPermitDefaultValues();
@@ -73,7 +73,7 @@ public class SecurityConfig  extends WebSecurityConfigurerAdapter {
 		source.registerCorsConfiguration("/**", configuration);
 		return source;
 	}
-
+	
 	@Bean
 	public BCryptPasswordEncoder bCryptPasswordEncoder() {
 		return new BCryptPasswordEncoder();

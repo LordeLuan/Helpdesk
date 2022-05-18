@@ -26,26 +26,26 @@ public class JWTUtil {
 				.setSubject(email)
 				// data de expiração
 				.setExpiration(new Date(System.currentTimeMillis() + expiration))
-				// token cripritografado
-				.signWith(SignatureAlgorithm.HS512, secret).compact();
+				// token cripritografado            //Tranforma o secret em byte NÃO ESQUECER
+				.signWith(SignatureAlgorithm.HS512, secret.getBytes())
+				.compact();
 	}
 
 	public boolean tokenValido(String token) {
 		Claims claims = getClaims(token);
-		if (claims != null) {
+		if(claims != null) {
 			String username = claims.getSubject();
-			Date expiratinDate = claims.getExpiration();
+			Date expirationDate = claims.getExpiration();
 			Date now = new Date(System.currentTimeMillis());
-
-			if (username != null && expiratinDate != null && now.before(expiratinDate)) {
+			
+			if(username != null && expirationDate != null && now.before(expirationDate)) {
 				return true;
 			}
 		}
 		return false;
 	}
-
+	
 	private Claims getClaims(String token) {
-
 		try {
 			return Jwts.parser().setSigningKey(secret.getBytes()).parseClaimsJws(token).getBody();
 		} catch (Exception e) {
@@ -55,7 +55,7 @@ public class JWTUtil {
 
 	public String getUsername(String token) {
 		Claims claims = getClaims(token);
-		if (claims != null) {
+		if(claims != null) {
 			return claims.getSubject();
 		}
 		return null;

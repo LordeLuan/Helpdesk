@@ -17,40 +17,44 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 
 	private JWTUtil jwtUtil;
-	private UserDetailsService userDetailsService;	
-	
-	public JWTAuthorizationFilter(AuthenticationManager authenticationManager, JWTUtil jwtUtil,UserDetailsService userDetailsService ) {
+	private UserDetailsService userDetailsService;
+
+//	Construtor
+	public JWTAuthorizationFilter(AuthenticationManager authenticationManager, JWTUtil jwtUtil,
+			UserDetailsService userDetailsService) {
 		super(authenticationManager);
 		this.jwtUtil = jwtUtil;
 		this.userDetailsService = userDetailsService;
-		}
+	}
 
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
-		
+
 //		Pega a informação do campo Authorization do header da requisição
 		String header = request.getHeader("Authorization");
 //		Verificar se a info do header é nula e se o token contem o Bearer que é obrigatório pois colocamos
-		if(header != null && header.startsWith("Bearer ")) {
-//			Armazena o valor real do token sem o Bearer na var
+		if (header != null && header.startsWith("Bearer ")) {
+//			Chama o metodo para autenticar o token, e retorna o token autenticado/ou não para o authToken
 			UsernamePasswordAuthenticationToken authToken = getAuthentication(header.substring(7));
-			
-			if(authToken != null) {
+
+			System.out.println(authToken + " " + header.substring(7));
+
+			if (authToken != null) {
 				SecurityContextHolder.getContext().setAuthentication(authToken);
 			}
 		}
-		
 		chain.doFilter(request, response);
-		
 	}
 
 	private UsernamePasswordAuthenticationToken getAuthentication(String token) {
-		if(jwtUtil.tokenValido(token)) {
+//		Chama o metoddo para válidar o token
+		if (jwtUtil.tokenValido(token)) {
 			String username = jwtUtil.getUsername(token);
 			UserDetails details = userDetailsService.loadUserByUsername(username);
 			return new UsernamePasswordAuthenticationToken(details.getUsername(), null, details.getAuthorities());
 		}
 		return null;
 	}
+
 }
