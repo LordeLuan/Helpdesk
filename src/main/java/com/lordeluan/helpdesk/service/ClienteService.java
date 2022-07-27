@@ -51,10 +51,15 @@ public class ClienteService {
 
 	public Cliente update(Integer id, @Valid ClienteDTO cliDTO) {
 		cliDTO.setId(id);
-		Cliente oldTecDto = findById(id);
+		Cliente oldClientDto = findById(id);
+		
+		if(!cliDTO.getSenha().equals(oldClientDto.getSenha())) {
+			cliDTO.setSenha(encoder.encode(cliDTO.getSenha()));
+		}
+		
 		validaPorCpfEEmail(cliDTO);
-		oldTecDto = new Cliente(cliDTO);
-		return repository.save(oldTecDto);
+		oldClientDto = new Cliente(cliDTO);
+		return repository.save(oldClientDto);
 	}
 	
 	private void validaPorCpfEEmail(ClienteDTO cliDTO) {

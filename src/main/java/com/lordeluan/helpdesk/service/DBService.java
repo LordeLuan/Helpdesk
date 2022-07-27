@@ -45,8 +45,8 @@ public class DBService {
 		Cliente cli3 = new Cliente(null, "Xerox Homicida", "50388199075", "Xerox@gmail.com", encoder.encode("Xerox"));
 
 		Chamado c1 = new Chamado(null, Prioridade.MEDIA, Status.ANDAMENTO, "Chamado 01", "Primeiro chamado", tec1, cli1);
-		Chamado c2 = new Chamado(null, Prioridade.BAIXA, Status.ANDAMENTO, "Chamado 02", "Segundo chamado", tec2, cli2);
-		Chamado c3 = new Chamado(null, Prioridade.ALTA, Status.ANDAMENTO, "Chamado 03", "Terceiro chamado", tec3, cli3);
+		Chamado c2 = new Chamado(null, Prioridade.BAIXA, Status.ABERTO, "Chamado 02", "Segundo chamado", tec2, cli2);
+		Chamado c3 = new Chamado(null, Prioridade.ALTA, Status.ENCERRADO, "Chamado 03", "Terceiro chamado", tec3, cli3);
 
 		tecnicoRepository.saveAll(Arrays.asList(tec1,tec2,tec3));
 		clienteRepository.saveAll(Arrays.asList(cli1,cli2,cli3));

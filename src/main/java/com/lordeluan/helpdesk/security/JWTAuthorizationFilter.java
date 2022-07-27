@@ -38,7 +38,7 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 //			Chama o metodo para autenticar o token, e retorna o token autenticado/ou não para o authToken
 			UsernamePasswordAuthenticationToken authToken = getAuthentication(header.substring(7));
 
-			System.out.println(authToken + " " + header.substring(7));
+//			System.out.println(authToken + " " + header.substring(7));
 
 			if (authToken != null) {
 				SecurityContextHolder.getContext().setAuthentication(authToken);

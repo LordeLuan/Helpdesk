@@ -24,9 +24,15 @@ public class TecnicoDTO implements Serializable {
 	protected String email;
 	@NotNull(message = "O campo SENHA é requerido")
 	protected String senha;
+	
 	protected Set<Integer> perfis = new HashSet<>();
 	@JsonFormat(pattern = "dd/MM/yyyy")
 	protected LocalDate dataCriacao = LocalDate.now();
+
+	public TecnicoDTO() {
+		super();
+		addPerfil(Perfil.CLIENTE);
+	}
 
 	public TecnicoDTO(Tecnico tecnico) {
 		super();
@@ -40,10 +46,6 @@ public class TecnicoDTO implements Serializable {
 		addPerfil(Perfil.CLIENTE);
 	}
 
-	public TecnicoDTO() {
-		super();
-		addPerfil(Perfil.CLIENTE);
-	}
 
 	public Integer getId() {
 		return id;
